@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ id }} Event users list</h1>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+        </tr>
+        {% for event_user in event_users %}
+            <tr>
+                <td>{{ event_user.id }}</td>
+                <td>{{ event_user.user.username }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block username %}
+    {{ username }}
+{% endblock %}

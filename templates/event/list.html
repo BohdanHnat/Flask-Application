@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if selected_page < (events_data|length / page_size)|round(0, "ceil")|int %}
+        <h1>{{ header }}</h1>
+        <div class="search-bar">
+            <form action="/events" method="get">
+                <input type="text" name="title" placeholder="Search by title" value="{{ request.args.get('title', '') }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        {% if not searched_title and request.args.get('title', '') %}
+            <div class="error-message">
+                No titles matching "{{ request.args.get('title', '') }}" found
+            </div>
+        {% endif %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Begin_at</th>
+                <th>End_at</th>
+                <th>Max_users</th>
+                <th>Status</th>
+            </tr>
+            {% for page in range((events_data|length / page_size)|round(0, "ceil")|int) %}
+                {% if page == selected_page or (page == 0 and searched_title) %}
+                    {% for event in events_data[(page * page_size):((page + 1) * page_size)] %}
+                        {% if (searched_title and event.title == searched_title[0]) or not searched_title %}
+                            <tr>
+                                <td>{{ event.id }}</td>
+                                <td><a href="/events/{{ event.id }}">{{ event.title }}</a></td>
+                                <td>{{ event.begin_at }}</td>
+                                <td>{{ event.end_at }}</td>
+                                <td>{{ event.max_users }}</td>
+                                <td>
+                                {% if event.end_at >= current_date and event.begin_at < current_date %}
+                                    {% if event.id not in registered_events_id %}
+                                        {% if event_users_data.filter_by(event_id=event.id).all()|length < event.max_users %}
+                                            <form method="post" action="/events/{{ event.id }}/users">
+                                                <input type="hidden" name="user_id" value="{{ current_user_id }}">
+                                                <input type="hidden" name="event_id" value="{{ event.id }}">
+                                                <input type="hidden" name="created_at" value="{{ current_date }}">
+                                                <button type="submit">Register</button>
+                                            </form>
+                                        {% else %}
+                                            Full
+                                        {% endif %}
+                                    {% else %}
+                                        Active & Registered
+                                    {% endif %}
+                                {% elif event.begin_at > current_date %}
+                                    Upcoming
+                                {% else %}
+                                    Ended
+                                {% endif %}
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </table>
+        <div class="pagination">
+            {% if selected_page > 0 %}
+                <a href="?size={{ page_size }}&page={{ selected_page - 1 }}">Previous</a>
+            {% endif %}
+
+            {% for page_number in range((events_data|length / page_size)|round(0, "ceil")|int) %}
+                {% if page_number == selected_page %}
+                    <span class="current">{{ page_number }}</span>
+                {% else %}
+                    <a href="?size={{ page_size }}&page={{ page_number }}">{{ page_number }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if selected_page != (events_data|length / page_size)|round(0, "ceil")|int - 1 %}
+                <a href="?size={{ page_size }}&page={{ selected_page + 1 }}">Next</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="error-message">
+            No existing page matching number "{{ selected_page }}" found
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block username %}
+    {{ username }}
+{% endblock %}

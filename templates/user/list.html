@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if selected_page < (users_data|length / page_size)|round(0, "ceil")|int %}
+        <h1>{{ header }}</h1>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>First_name</th>
+                <th>Last_name</th>
+                <th>Password</th>
+            </tr>
+            {% for page in range((users_data|length / page_size)|round(0, "ceil")|int) %}
+                {% if page == selected_page %}
+                    {% for user in users_data[(page * page_size):((page + 1) * page_size)] %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.first_name }}</td>
+                            <td>{{ user.last_name }}</td>
+                            <td>{{ user.password }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </table>
+        <div class="pagination">
+            {% if selected_page > 0 %}
+                <a href="?size={{ page_size }}&page={{ selected_page - 1 }}">Previous</a>
+            {% endif %}
+
+            {% for page_number in range((users_data|length / page_size)|round(0, "ceil")|int) %}
+                {% if page_number == selected_page %}
+                    <span class="current">{{ page_number }}</span>
+                {% else %}
+                    <a href="?size={{ page_size }}&page={{ page_number }}">{{ page_number }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if selected_page != (users_data|length / page_size)|round(0, "ceil")|int - 1 %}
+                <a href="?size={{ page_size }}&page={{ selected_page + 1 }}">Next</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="error-message">
+            No existing page matching number "{{ selected_page }}" found
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block username %}
+    {{ username }}
+{% endblock %}

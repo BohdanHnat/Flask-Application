@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ header }}</h1>
+    <table>
+        {% if items_data[0].title %}
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Created_by</th>
+                <th>Begin_at</th>
+                <th>End_at</th>
+                <th>Max_users</th>
+                <th>Is_active</th>
+            </tr>
+        {% else %}
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>First_name</th>
+                <th>Last_name</th>
+                <th>Password</th>
+            </tr>
+        {% endif %}
+        {% for item in items_data %}
+            {% if items_data[0].title %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td><a href="/events/{{ item.id }}">{{ item.title }}</a></td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ item.created_by }}</td>
+                    <td>{{ item.begin_at }}</td>
+                    <td>{{ item.end_at }}</td>
+                    <td>{{ item.max_users }}</td>
+                    <td>{{ item.is_active }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.first_name }}</td>
+                    <td>{{ item.last_name }}</td>
+                    <td>{{ item.password }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% block username %}
+    {{ username }}
+{% endblock %}

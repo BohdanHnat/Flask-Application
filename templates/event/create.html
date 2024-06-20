@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Event creation page</h1>
+    <form method="post" action="/events">
+        <!-- Title -->
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+        </div>
+        <!-- Description -->
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" required></textarea>
+        </div>
+        <!-- Created By -->
+        <div class="form-group">
+            <label for="created_by">Created By (User ID):</label>
+            <input type="number" id="created_by" name="created_by" required>
+        </div>
+        <!-- Begin At -->
+        <div class="form-group">
+            <label for="begin_at">Begin At (YYYY-MM-DD):</label>
+            <input type="date" id="begin_at" name="begin_at" required>
+        </div>
+        <!-- End At -->
+        <div class="form-group">
+            <label for="end_at">End At (YYYY-MM-DD):</label>
+            <input type="date" id="end_at" name="end_at" required>
+        </div>
+        <!-- Max Users -->
+        <div class="form-group">
+            <label for="max_users">Max Users:</label>
+            <input type="number" id="max_users" name="max_users" required>
+        </div>
+        <!-- Is Active -->
+        <div class="form-group">
+            <label for="is_active">Is Active:</label>
+            <input type="checkbox" id="is_active" name="is_active">
+        </div>
+        <!-- Submit Button -->
+        <button type="submit">Create Event</button>
+    </form>
+{% endblock %}
+
+{% block username %}
+    {{ username }}
+{% endblock %}
