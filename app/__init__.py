@@ -26,3 +26,8 @@ def page_not_found(error):
 def internal_server_error(error):
     return '<h1>My bad...</h1>', 500
 
+from app.event import views
+from app.main import views
+from app.user import views
+
+
