@@ -1,4 +1,4 @@
-# Event Calendar
+# Event-Calendar
 
 **Event Calendar** is a test application to store data of registered users, as well as the data of events that users can create. Particularly useful for scheduling your own events and managing the upcoming ones  
 
